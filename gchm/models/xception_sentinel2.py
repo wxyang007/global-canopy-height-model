@@ -368,7 +368,7 @@ class XceptionS2(nn.Module):
         return variances
 
     def _load_model_weights(self, model_weights_path):
-        checkpoint = torch.load(model_weights_path)
+        checkpoint = torch.load(model_weights_path, map_location='mps')
         model_weights = checkpoint['model_state_dict']
         self.load_state_dict(model_weights)
 
