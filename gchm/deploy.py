@@ -20,8 +20,11 @@ from gchm.utils.parser import load_args_from_json, str2bool, str_or_none
 from gchm.utils.aws import download_and_zip_safe_from_aws
 
 
-DEVICE = torch.device("cuda:0")
-print('DEVICE: ', DEVICE, torch.cuda.get_device_name(0))
+if torch.cuda.is_available():
+    DEVICE = torch.device("cuda") # or cuda:0 in the original code; DEVICE = torch.device("cuda:0")
+else:
+    DEVICE = torch.device("cpu")
+# print('DEVICE: ', DEVICE, torch.cuda.get_device_name(0))
 gdal.UseExceptions()
 
 
@@ -241,12 +244,13 @@ if __name__ == "__main__":
     architecture_collection = Architectures(args=args)
     net = architecture_collection(args.architecture)(num_outputs=1)
 
-    net.cuda()  # move model to GPU
+    # net.cuda()  # move model to GPU
+    net.to(DEVICE) # Wenxin: since this computer does not have an nvidia driver, I am using CPU to run it for now
 
     # Load latest weights from checkpoint file (alternative load best val epoch from best_weights.pt)
     print('Loading model weights from latest checkpoint ...')
     checkpoint_path = Path(args.model_dir) / 'checkpoint.pt'
-    checkpoint = torch.load(checkpoint_path)
+    checkpoint = torch.load(checkpoint_path, map_location='cpu') # on mac, map_location='mps'
     model_weights = checkpoint['model_state_dict']
 
     pred_dict = predict(model=net, args=args, model_weights=model_weights,

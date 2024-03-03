@@ -459,8 +459,14 @@ if __name__ == "__main__":
     # create the model as used in "A high-resolution canopy height model of the Earth."
     model = xceptionS2_08blocks_256()
 
+    if torch.cuda.is_available():
+        DEVICE = torch.device("cuda")  # or cuda:0 in the original code; DEVICE = torch.device("cuda:0")
+    else:
+        DEVICE = torch.device("cpu")
+    # print('DEVICE: ', DEVICE, torch.cuda.get_device_name(0))
+
     # move model to GPU
-    model.cuda()
+    model.to(DEVICE)
 
     # print the model/summary
     print(model)

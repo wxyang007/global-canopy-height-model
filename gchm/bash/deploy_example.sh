@@ -15,7 +15,7 @@ GCHM_DEPLOY_SENTINEL2_AWS_DIR="./deploy_example/sentinel2_aws"
 mkdir -p ${GCHM_DEPLOY_DIR}
 mkdir -p ${GCHM_DEPLOY_SENTINEL2_AWS_DIR}
 
-python3 gchm/deploy.py --model_dir=${GCHM_MODEL_DIR} \
+python gchm/deploy.py --model_dir=${GCHM_MODEL_DIR} \
                        --deploy_image_path=${DEPLOY_IMAGE_PATH} \
                        --deploy_dir=${GCHM_DEPLOY_DIR} \
                        --deploy_patch_size=512 \
@@ -26,4 +26,3 @@ python3 gchm/deploy.py --model_dir=${GCHM_MODEL_DIR} \
                        --download_from_aws=${GCHM_DOWNLOAD_FROM_AWS} \
                        --sentinel2_dir=${sentinel2_dir} \
                        --remove_image_after_pred="False"
-
